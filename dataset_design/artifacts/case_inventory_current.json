@@ -1,0 +1,96 @@
+{
+  "schema_version": "statewise-case-inventory-v1",
+  "generated_at": "2026-07-30T08:04:04.539821+00:00",
+  "case_files": 224,
+  "parsed_cases": 224,
+  "unique_case_ids": 224,
+  "duplicate_case_ids": [],
+  "errors": [],
+  "counts": {
+    "by_quota_bucket": {
+      "agent_safety_tool_harm": 15,
+      "clarification_interaction": 20,
+      "control_or_excluded": 1,
+      "core_repo_state": 143,
+      "measurement_canary": 10,
+      "memory_lineage_state": 35
+    },
+    "by_domain": {
+      "database_state": 1,
+      "deployment_state": 1,
+      "environment_state": 100,
+      "filesystem_state": 2,
+      "git_state": 49,
+      "read_only_control": 1,
+      "user_private_semantics": 70
+    },
+    "by_phase": {
+      "<missing>": 7,
+      "batch2_env": 4,
+      "batch2_env_r2": 8,
+      "batch2_fs": 4,
+      "batch2_fs_r2": 8,
+      "batch2_git": 4,
+      "batch2_git_r2": 4,
+      "diagnostic_round_1": 8,
+      "harder_pilot": 9,
+      "heldout_measurement_canary_v1": 10,
+      "phase2_pilot": 8,
+      "wave1_materialized": 150
+    },
+    "by_execution_tier": {
+      "<missing>": 2,
+      "lightweight": 222
+    },
+    "by_capability_score_eligible": {
+      "False": 10,
+      "None": 64,
+      "True": 150
+    },
+    "memory_lineage_stressor_cases": 142
+  },
+  "quota_gaps": [
+    {
+      "bucket": "core_repo_state",
+      "current": 143,
+      "quota": 150,
+      "gap": 7,
+      "target_domains": "environment,dependency,filesystem,git,config,build_test",
+      "source_families": "StateWise 04 repo pool; SWE-bench/SWE-EVO style repo maintenance only as background",
+      "reuse_mode": "derived_cases"
+    },
+    {
+      "bucket": "memory_lineage_state",
+      "current": 35,
+      "quota": 60,
+      "gap": 25,
+      "target_domains": "stale_memory,implicit_conflict,lineage,poisoning,scope_mismatch",
+      "source_families": "STALE; MemEvoBench; MemLineage; MPBench",
+      "reuse_mode": "taxonomy_and_case_templates"
+    },
+    {
+      "bucket": "clarification_interaction",
+      "current": 20,
+      "quota": 45,
+      "gap": 25,
+      "target_domains": "missing_premise,ambiguous_state_key,decoy_question,target_selection",
+      "source_families": "Ambig-SWE; Ask-or-Assume; ClarEval; Dialogue-SWEBench; SpecBench",
+      "reuse_mode": "interaction_templates"
+    },
+    {
+      "bucket": "agent_safety_tool_harm",
+      "current": 15,
+      "quota": 45,
+      "gap": 30,
+      "target_domains": "risky_tool_use,prompt_injection,confused_deputy,permission_boundary,external_tool_state",
+      "source_families": "Agent-SafetyBench; ASB; OpenAgentSafety; AgentDojo; OS-Harm; OSGuard; MCP-SafetyBench; AgentCanary/Agent3Sigma; HarmActionsEval; R-Judge",
+      "reuse_mode": "scenario_and_metric_templates"
+    }
+  ],
+  "gap_slot_count": 87,
+  "notes": [
+    "Canary and control cases are not counted toward the 300-case quota.",
+    "Existing operational software-state cases are conservatively counted as core_repo_state unless quota_bucket is explicit.",
+    "Missing capability_score_eligible should be resolved before any formal publication table."
+  ]
+}

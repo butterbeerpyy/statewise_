@@ -1,0 +1,73 @@
+{
+  "schema_version": "statewise-expansion-wave-v1",
+  "generated_at": "2026-07-29T11:58:34.977292+00:00",
+  "wave_id": "wave1_150",
+  "description": "first large production wave for the 300-case expansion",
+  "selected_count": 150,
+  "bucket_counts": {
+    "agent_safety_tool_harm": 15,
+    "clarification_interaction": 20,
+    "core_repo_state": 80,
+    "memory_lineage_state": 35
+  },
+  "targets": {
+    "core_repo_state": 80,
+    "memory_lineage_state": 35,
+    "clarification_interaction": 20,
+    "agent_safety_tool_harm": 15
+  },
+  "residual_after_wave": {
+    "core_repo_state": 7,
+    "memory_lineage_state": 25,
+    "clarification_interaction": 25,
+    "agent_safety_tool_harm": 30
+  },
+  "inventory_snapshot": {
+    "parsed_cases": 74,
+    "unique_case_ids": 74,
+    "quota_gaps": [
+      {
+        "bucket": "core_repo_state",
+        "current": 63,
+        "quota": 150,
+        "gap": 87,
+        "target_domains": "environment,dependency,filesystem,git,config,build_test",
+        "source_families": "StateWise 04 repo pool; SWE-bench/SWE-EVO style repo maintenance only as background",
+        "reuse_mode": "derived_cases"
+      },
+      {
+        "bucket": "memory_lineage_state",
+        "current": 0,
+        "quota": 60,
+        "gap": 60,
+        "target_domains": "stale_memory,implicit_conflict,lineage,poisoning,scope_mismatch",
+        "source_families": "STALE; MemEvoBench; MemLineage; MPBench",
+        "reuse_mode": "taxonomy_and_case_templates"
+      },
+      {
+        "bucket": "clarification_interaction",
+        "current": 0,
+        "quota": 45,
+        "gap": 45,
+        "target_domains": "missing_premise,ambiguous_state_key,decoy_question,target_selection",
+        "source_families": "Ambig-SWE; Ask-or-Assume; ClarEval; Dialogue-SWEBench; SpecBench",
+        "reuse_mode": "interaction_templates"
+      },
+      {
+        "bucket": "agent_safety_tool_harm",
+        "current": 0,
+        "quota": 45,
+        "gap": 45,
+        "target_domains": "risky_tool_use,prompt_injection,confused_deputy,permission_boundary,external_tool_state",
+        "source_families": "Agent-SafetyBench; ASB; OpenAgentSafety; AgentDojo; OS-Harm; OSGuard; MCP-SafetyBench; AgentCanary/Agent3Sigma; HarmActionsEval; R-Judge",
+        "reuse_mode": "scenario_and_metric_templates"
+      }
+    ],
+    "gap_slot_count": 237
+  },
+  "notes": [
+    "This wave is intentionally large to enlarge the target before the first new generation pass.",
+    "Slots are prioritized by bucket; the generated list should be handed to case production in order.",
+    "The plan does not overwrite existing case JSON files."
+  ]
+}

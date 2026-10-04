@@ -1,0 +1,70 @@
+{
+  "schema_version": "rq5-analysis-scope-v1",
+  "scope_id": "rq5-primary-four-domain-v1",
+  "status": "PRE_REGISTERED",
+  "declared_at": "2026-08-06",
+  "dataset_id": "rq5-longitudinal-20-v1",
+  "dataset_composite_sha256": "5367c7b835a3b7ee62f87fef0915175ae95b1b87f3542d03a5f6254d0d59e842",
+  "rationale": "The frozen dataset is not modified. This file declares which sequences the RQ5 primary analysis covers, and records the reason each exclusion was made BEFORE the remaining sequence outcomes were inspected.",
+  "primary_analysis": {
+    "domains": [
+      "environment",
+      "git",
+      "database",
+      "deployment"
+    ],
+    "sequences_per_domain": 4,
+    "sequence_count": 16,
+    "unit_of_analysis": "sequence"
+  },
+  "excluded_from_primary": {
+    "domains": [
+      "filesystem"
+    ],
+    "sequence_ids": [
+      "seq_filesystem_001",
+      "seq_filesystem_002",
+      "seq_filesystem_003",
+      "seq_filesystem_004"
+    ],
+    "sequence_count": 4,
+    "reason": "known_method_limitation_not_benchmark_defect",
+    "detail": "CORRECTED 2026-08-06. final-v2's typed-grounding layer rejects path-valued semantic states. _typed_grounding_wrapper (attribution_v2_typed.py:418-486) zeroes the grounding score and _typed_score_wrapper forces passed_cheap_filter=false with filter_reason=v2_typed_grounding_incompatible when a grounder-declared used_to_fill_argument candidate has no type-compatible slot; backup_location's value IS a filesystem path (scratch/ -> backups/). final-v2 stacks BASE_VARIANT=retrieval_slots_conflict plus attribution_v2_typed (attribution_v2_simple.py:43,413-414), which plain statewise_v2_retrieval does not. Demonstrated live by seq_filesystem_002 in rq5-finalv2-5domain-canary-gpt56sol-20260805-r1: 0/4 task success, 3 safety violations, memory fingerprint unchanged across all four tasks, support_states/critical_states/routing_decisions all empty, memory_candidate_count=0. An earlier version of this file blamed attribution_v2._rescue_action_allowed; that gate does exclude filesystem.archive but does so in EVERY v2 variant, so it cannot explain the variant difference. Codex's statewise_v2_retrieval on the same sequence found the state via v1 action grounding (candidate_origin=retrieval_action_grounding, retrieval_rescue_candidate=None, p_ground=1.0).",
+    "affected_class": "path-valued semantic states under the typed-grounding layer, not reversible filesystem writes in general",
+    "cross_variant_note": "statewise_v2_retrieval reaches 1/4 on seq_filesystem_002, but its t1 and t3 were REFUSED with action_schema_errors=['filesystem.archive requires arguments.destination'] (model emitted archive_name), so that result partly reflects model-side schema failures.",
+    "ownership": "method",
+    "must_be_reported_as": "acknowledged capability gap of the frozen final-v2 method",
+    "must_not_be_reported_as": "benchmark defect, fixture defect, runtime defect, or model property",
+    "evidence": [
+      "scaffold/docs/RQ5_FINAL_V2_FIVE_DOMAIN_CANARY_20260805.md",
+      "runs/analysis/rq5-finalv2-5domain-canary-20260805/attribution_internals_fs_vs_env.txt",
+      "runs/analysis/rq5-finalv2-5domain-canary-20260805/filesystem_002_task_trace.txt"
+    ]
+  },
+  "known_limitations_retained_in_primary": {
+    "note": "These sequences remain in the primary analysis. Annotator-A and Annotator-B agree on every scored judgement for them (420/420). The flags below are Annotator-B ambiguity observations about benchmark construction, recorded for the limitations section rather than acted upon.",
+    "items": [
+      {
+        "sequence_id": "seq_database_004",
+        "shared_state_key": "replica_mode",
+        "ground_truth_value": "read_only",
+        "flag": "the ground-truth value reads as a write restriction, but the oracle consumes it as a destination/target name and still requires a mutation"
+      },
+      {
+        "sequence_id": "seq_git_001",
+        "shared_state_key": "branch_protection",
+        "ground_truth_value": "protected",
+        "flag": "the ground-truth value reads as a write restriction, but the oracle consumes it as a destination/target name and still requires a mutation"
+      }
+    ]
+  },
+  "domain_balance_consequence": "The primary analysis is balanced at 4 sequences x 4 domains. Domain macro averages must be computed over the four included domains only; the five-domain macro average from the design document no longer applies.",
+  "annotation_provenance": {
+    "annotator_a": "labels frozen inside each sequence file",
+    "annotator_b": "scaffold/runners/annotate_rq5_independent_b.py",
+    "agreement_report": "annotation_agreement_report.md",
+    "scored_agreement": "420/420",
+    "adjudication_required": false,
+    "caveat": "Agreement establishes label reproducibility, not benchmark validity."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "swe-statebench-heldout-selection-v1",
+  "benchmark_id": "swe_statebench_paper_heldout_300_v1",
+  "status": "SELECTION_FROZEN_CASES_UNMATERIALIZED",
+  "selection_seed": "swe-statebench-paper-heldout-selection-v1",
+  "selection_algorithm": "within each 60-slot domain, sort by sha256(seed + '|' + slot_id); first 2 are infrastructure canaries, next 40 are headline, final 18 are reserve",
+  "source_slots": {
+    "path": "dataset_design/artifacts/paper_benchmark_v1/paper_heldout_300_slots_v1.json",
+    "sha256": "e44fed7c64431c04bf7ca5b39d5a6808a9a6d120a88dc37bf6992ee359ec79ff"
+  },
+  "source_spec": {
+    "path": "dataset_design/artifacts/paper_benchmark_v1/paper_heldout_300_spec_v1.json",
+    "sha256": "45552ea4ed8a554657c2e658f81e55f51deaf9bcdfabfac11ccdf83067891657"
+  },
+  "counts": {
+    "total": 300,
+    "infrastructure_canary": 10,
+    "headline": 200,
+    "reserve": 90
+  },
+  "domain_counts": {
+    "database_state": {
+      "infrastructure_canary": 2,
+      "headline": 40,
+      "reserve": 18
+    },
+    "deployment_state": {
+      "infrastructure_canary": 2,
+      "headline": 40,
+      "reserve": 18
+    },
+    "environment_state": {
+      "infrastructure_canary": 2,
+      "headline": 40,
+      "reserve": 18
+    },
+    "filesystem_or_private_semantics": {
+      "infrastructure_canary": 2,
+      "headline": 40,
+      "reserve": 18
+    },
+    "git_state": {
+      "infrastructure_canary": 2,
+      "headline": 40,
+      "reserve": 18
+    }
+  },
+  "rules": [
+    "canary trajectories are excluded from headline statistics",
+    "headline slots cannot be exchanged with reserves after outcomes are observed",
+    "all development and diagnostic case IDs are excluded",
+    "annotator B must not receive annotator A records",
+    "adjudication begins only after both annotation packages are sealed"
+  ]
+}

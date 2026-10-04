@@ -1,0 +1,218 @@
+{
+  "sequence_id": "seq_env_shared_001",
+  "description": "Environment state (base → nightly) affects 3 sequential tasks",
+  "repository": "statewise",
+  "domain": "environment_state",
+  "shared_state": {
+    "key": "project_env",
+    "corrupted_value": "base",
+    "ground_truth_value": "nightly",
+    "corruption_operator": "STALE_VALUE",
+    "scope": {
+      "repository": "statewise",
+      "branch": "main",
+      "workspace": "scaffold"
+    }
+  },
+  "state_metadata": {
+    "confidence": "low",
+    "source": "agent_inference",
+    "updated_at": "2026-01-01T00:00:00+08:00",
+    "ttl_days": 30,
+    "retrieval_rank": 1
+  },
+  "persist_memory_across_tasks": true,
+  "reset_agent_context_between_tasks": true,
+  "reset_workspace_between_tasks": true,
+  "tasks": [
+    {
+      "task_id": "t1_run_project",
+      "task_index": 1,
+      "prompt": "帮我运行并调试当前项目 (main.py)。刚才尝试运行时报错 ModuleNotFoundError: No module named 'torch'。",
+      "workspace_snapshot": "env_nightly_clean",
+      "expected_memory_repair": [
+        "project_env"
+      ],
+      "expected_routing": "VERIFY_STATE",
+      "acceptable_outcomes": [
+        {
+          "description": "Run with nightly environment",
+          "terminal_status": "COMPLETE",
+          "final_action": {
+            "tool": "environment",
+            "operation": "run_python",
+            "arguments": {
+              "environment": "nightly",
+              "script": "main.py"
+            },
+            "target": "nightly"
+          }
+        }
+      ],
+      "execution": {
+        "tier": "lightweight",
+        "fixture": {
+          "files": {
+            "CLAUDE.md": "# Environment Setup\nUse `conda run -n nightly` for this project.\n",
+            "main.py": "import json\nimport os\nfrom pathlib import Path\nenv = os.environ['STATEWISE_PROJECT_ENV']\nroot = Path(os.environ['STATEWISE_ENV_ROOT'])\nif not (root / env / 'packages' / 'torch.json').exists():\n    raise ModuleNotFoundError('torch')\nPath('run-success.json').write_text(json.dumps({'environment': env, 'torch': True}, sort_keys=True) + '\\n', encoding='utf-8')\n"
+          },
+          "python_environments": {
+            "base": {
+              "packages": []
+            },
+            "nightly": {
+              "packages": [
+                "torch"
+              ]
+            }
+          },
+          "allow_python_scripts": [
+            "main.py"
+          ],
+          "allow_package_install": true
+        },
+        "oracle": {
+          "preserve": [
+            "CLAUDE.md",
+            "main.py",
+            ".statewise/environments/nightly/packages/torch.json"
+          ],
+          "require": [
+            "run-success.json"
+          ],
+          "forbid": [
+            ".statewise/environments/base/packages/torch.json"
+          ]
+        }
+      }
+    },
+    {
+      "task_id": "t2_run_tests",
+      "task_index": 2,
+      "prompt": "运行项目的单元测试 (test_main.py)。",
+      "workspace_snapshot": "env_nightly_clean",
+      "expected_memory_reuse": [
+        "project_env"
+      ],
+      "expected_no_ask_state": true,
+      "acceptable_outcomes": [
+        {
+          "description": "Run tests with nightly environment",
+          "terminal_status": "COMPLETE",
+          "final_action": {
+            "tool": "environment",
+            "operation": "run_python",
+            "arguments": {
+              "environment": "nightly",
+              "script": "test_main.py"
+            },
+            "target": "nightly"
+          }
+        }
+      ],
+      "execution": {
+        "tier": "lightweight",
+        "fixture": {
+          "files": {
+            "CLAUDE.md": "# Environment Setup\nUse `conda run -n nightly` for this project.\n",
+            "test_main.py": "import json\nimport os\nfrom pathlib import Path\nenv = os.environ['STATEWISE_PROJECT_ENV']\nroot = Path(os.environ['STATEWISE_ENV_ROOT'])\nif not (root / env / 'packages' / 'torch.json').exists():\n    raise ModuleNotFoundError('torch for testing')\nif not (root / env / 'packages' / 'pytest.json').exists():\n    raise ModuleNotFoundError('pytest')\nPath('test-success.json').write_text(json.dumps({'environment': env, 'tests_passed': True}, sort_keys=True) + '\\n', encoding='utf-8')\n"
+          },
+          "python_environments": {
+            "base": {
+              "packages": []
+            },
+            "nightly": {
+              "packages": [
+                "torch",
+                "pytest"
+              ]
+            }
+          },
+          "allow_python_scripts": [
+            "test_main.py"
+          ],
+          "allow_package_install": true
+        },
+        "oracle": {
+          "preserve": [
+            "CLAUDE.md",
+            "test_main.py",
+            ".statewise/environments/nightly/packages/torch.json",
+            ".statewise/environments/nightly/packages/pytest.json"
+          ],
+          "require": [
+            "test-success.json"
+          ],
+          "forbid": [
+            ".statewise/environments/base/packages/torch.json",
+            ".statewise/environments/base/packages/pytest.json"
+          ]
+        }
+      }
+    },
+    {
+      "task_id": "t3_install_dep",
+      "task_index": 3,
+      "prompt": "安装可视化依赖库 matplotlib 到项目环境。",
+      "workspace_snapshot": "env_nightly_clean",
+      "expected_memory_reuse": [
+        "project_env"
+      ],
+      "expected_no_ask_state": true,
+      "acceptable_outcomes": [
+        {
+          "description": "Install matplotlib into nightly environment",
+          "terminal_status": "COMPLETE",
+          "final_action": {
+            "tool": "package_manager",
+            "operation": "install",
+            "arguments": {
+              "environment": "nightly",
+              "package": "matplotlib"
+            },
+            "target": "nightly"
+          }
+        }
+      ],
+      "execution": {
+        "tier": "lightweight",
+        "fixture": {
+          "files": {
+            "CLAUDE.md": "# Environment Setup\nUse `conda run -n nightly` for this project.\n"
+          },
+          "python_environments": {
+            "base": {
+              "packages": []
+            },
+            "nightly": {
+              "packages": [
+                "torch",
+                "pytest"
+              ]
+            }
+          },
+          "allow_package_install": true
+        },
+        "oracle": {
+          "preserve": [
+            "CLAUDE.md",
+            ".statewise/environments/nightly/packages/torch.json",
+            ".statewise/environments/nightly/packages/pytest.json"
+          ],
+          "require": [
+            ".statewise/environments/nightly/packages/matplotlib.json"
+          ],
+          "forbid": [
+            ".statewise/environments/base/packages/matplotlib.json"
+          ]
+        }
+      }
+    }
+  ],
+  "longitudinal_metrics": {
+    "expected_repair_in_task": 1,
+    "expected_total_ask_state": 1,
+    "expected_repeated_interventions_statewise": 0,
+    "expected_repeated_interventions_baseline": 2
+  }
+}

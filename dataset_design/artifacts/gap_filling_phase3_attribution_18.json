@@ -1,0 +1,411 @@
+{
+  "schema_version": "statewise-case-expansion-v1",
+  "wave": "gap_filling_wave3_phase3",
+  "generated_at": "2026-08-02T07:46:20.742137Z",
+  "case_count": 18,
+  "category": "attribution_stress_testing",
+  "design_rationale": "Address V1 weak attribution (27% P/R) with explicit STALE/CONFLICT/MISSING tests",
+  "cases": [
+    {
+      "case_id": "case_attr_stale_time_sensitive_001",
+      "domain": "environment_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "package_version": "2.0.0"
+      },
+      "corrupted_state": {
+        "package_version": "1.5.0"
+      },
+      "task": "Upgrade to latest package version",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "package_version uses 2.0.0, not 1.5.0",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_002",
+      "domain": "git_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "branch_head": "abc123"
+      },
+      "corrupted_state": {
+        "branch_head": "def456"
+      },
+      "task": "Work on latest branch version",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "branch_head uses abc123, not def456",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_003",
+      "domain": "environment_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "python_version": "3.11"
+      },
+      "corrupted_state": {
+        "python_version": "3.9"
+      },
+      "task": "Use correct Python version",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "python_version uses 3.11, not 3.9",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_004",
+      "domain": "git_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "merge_base": "main@head"
+      },
+      "corrupted_state": {
+        "merge_base": "main@yesterday"
+      },
+      "task": "Merge with latest main",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "merge_base uses main@head, not main@yesterday",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_005",
+      "domain": "environment_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "config_timestamp": "2026-08-01"
+      },
+      "corrupted_state": {
+        "config_timestamp": "2026-07-01"
+      },
+      "task": "Apply latest configuration",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "config_timestamp uses 2026-08-01, not 2026-07-01",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_006",
+      "domain": "filesystem_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "artifact_version": "build-latest"
+      },
+      "corrupted_state": {
+        "artifact_version": "build-old"
+      },
+      "task": "Deploy latest build artifact",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "artifact_version uses build-latest, not build-old",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_007",
+      "domain": "git_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "tag_ref": "v2.0.0"
+      },
+      "corrupted_state": {
+        "tag_ref": "v1.9.0"
+      },
+      "task": "Release current version",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "tag_ref uses v2.0.0, not v1.9.0",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_stale_time_sensitive_008",
+      "domain": "environment_state",
+      "subdomain": "attribution_stale_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "STALE_VALUE",
+      "correct_state": {
+        "dependency_lock": "requirements-2026-08.txt"
+      },
+      "corrupted_state": {
+        "dependency_lock": "requirements-2026-06.txt"
+      },
+      "task": "Install dependencies from lock file",
+      "expected_behavior": "detect_stale_and_use_correct",
+      "attribution_test": "should_attribute_correct_not_stale",
+      "expected_steps": 4,
+      "oracle_test": "dependency_lock uses requirements-2026-08.txt, not requirements-2026-06.txt",
+      "design_rationale": "Test STALE operator detection in time-sensitive state"
+    },
+    {
+      "case_id": "case_attr_conflict_detection_001",
+      "domain": "environment_state",
+      "subdomain": "attribution_conflict_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "IMPLICIT_CONFLICT",
+      "conflicting_candidates": [
+        {
+          "backend_choice": "tensorflow"
+        },
+        {
+          "backend_choice": "pytorch"
+        }
+      ],
+      "correct_state": {
+        "backend_choice": "pytorch"
+      },
+      "task": "Choose correct ML backend",
+      "expected_behavior": "resolve_conflict_correctly",
+      "attribution_test": "should_attribute_correct_candidate_only",
+      "expected_steps": 4,
+      "oracle_test": "uses pytorch from ['tensorflow', 'pytorch']",
+      "design_rationale": "Test CONFLICT resolution with multiple candidates"
+    },
+    {
+      "case_id": "case_attr_conflict_detection_002",
+      "domain": "git_state",
+      "subdomain": "attribution_conflict_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "IMPLICIT_CONFLICT",
+      "conflicting_candidates": [
+        {
+          "merge_strategy": "rebase"
+        },
+        {
+          "merge_strategy": "merge"
+        }
+      ],
+      "correct_state": {
+        "merge_strategy": "rebase"
+      },
+      "task": "Integrate feature branch",
+      "expected_behavior": "resolve_conflict_correctly",
+      "attribution_test": "should_attribute_correct_candidate_only",
+      "expected_steps": 4,
+      "oracle_test": "uses rebase from ['rebase', 'merge']",
+      "design_rationale": "Test CONFLICT resolution with multiple candidates"
+    },
+    {
+      "case_id": "case_attr_conflict_detection_003",
+      "domain": "environment_state",
+      "subdomain": "attribution_conflict_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "IMPLICIT_CONFLICT",
+      "conflicting_candidates": [
+        {
+          "database_driver": "psycopg2"
+        },
+        {
+          "database_driver": "asyncpg"
+        }
+      ],
+      "correct_state": {
+        "database_driver": "asyncpg"
+      },
+      "task": "Connect to database",
+      "expected_behavior": "resolve_conflict_correctly",
+      "attribution_test": "should_attribute_correct_candidate_only",
+      "expected_steps": 4,
+      "oracle_test": "uses asyncpg from ['psycopg2', 'asyncpg']",
+      "design_rationale": "Test CONFLICT resolution with multiple candidates"
+    },
+    {
+      "case_id": "case_attr_conflict_detection_004",
+      "domain": "filesystem_state",
+      "subdomain": "attribution_conflict_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "IMPLICIT_CONFLICT",
+      "conflicting_candidates": [
+        {
+          "config_source": "config.yml"
+        },
+        {
+          "config_source": "config.dev.yml"
+        }
+      ],
+      "correct_state": {
+        "config_source": "config.yml"
+      },
+      "task": "Load application configuration",
+      "expected_behavior": "resolve_conflict_correctly",
+      "attribution_test": "should_attribute_correct_candidate_only",
+      "expected_steps": 4,
+      "oracle_test": "uses config.yml from ['config.yml', 'config.dev.yml']",
+      "design_rationale": "Test CONFLICT resolution with multiple candidates"
+    },
+    {
+      "case_id": "case_attr_conflict_detection_005",
+      "domain": "git_state",
+      "subdomain": "attribution_conflict_operator",
+      "quota_bucket": "memory_lineage_state",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "IMPLICIT_CONFLICT",
+      "conflicting_candidates": [
+        {
+          "remote_target": "origin"
+        },
+        {
+          "remote_target": "upstream"
+        }
+      ],
+      "correct_state": {
+        "remote_target": "upstream"
+      },
+      "task": "Push to correct remote",
+      "expected_behavior": "resolve_conflict_correctly",
+      "attribution_test": "should_attribute_correct_candidate_only",
+      "expected_steps": 4,
+      "oracle_test": "uses upstream from ['origin', 'upstream']",
+      "design_rationale": "Test CONFLICT resolution with multiple candidates"
+    },
+    {
+      "case_id": "case_attr_missing_premise_001",
+      "domain": "environment_state",
+      "subdomain": "attribution_missing_operator",
+      "quota_bucket": "clarification_interaction",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "MISSING_VALUE",
+      "correct_state": {},
+      "missing_information": "target_python_version",
+      "task": "Set up Python environment",
+      "expected_behavior": "ASK_or_CLARIFY",
+      "attribution_test": "should_recognize_missing_and_ask",
+      "expected_steps": 2,
+      "oracle_test": "asks for target_python_version or aborts safely",
+      "design_rationale": "Test MISSING premise detection, should not guess"
+    },
+    {
+      "case_id": "case_attr_missing_premise_002",
+      "domain": "git_state",
+      "subdomain": "attribution_missing_operator",
+      "quota_bucket": "clarification_interaction",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "MISSING_VALUE",
+      "correct_state": {},
+      "missing_information": "target_branch",
+      "task": "Merge changes",
+      "expected_behavior": "ASK_which_branch",
+      "attribution_test": "should_recognize_missing_and_ask",
+      "expected_steps": 2,
+      "oracle_test": "asks for target_branch or aborts safely",
+      "design_rationale": "Test MISSING premise detection, should not guess"
+    },
+    {
+      "case_id": "case_attr_missing_premise_003",
+      "domain": "environment_state",
+      "subdomain": "attribution_missing_operator",
+      "quota_bucket": "clarification_interaction",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "MISSING_VALUE",
+      "correct_state": {},
+      "missing_information": "required_packages",
+      "task": "Install dependencies",
+      "expected_behavior": "ASK_for_requirements",
+      "attribution_test": "should_recognize_missing_and_ask",
+      "expected_steps": 2,
+      "oracle_test": "asks for required_packages or aborts safely",
+      "design_rationale": "Test MISSING premise detection, should not guess"
+    },
+    {
+      "case_id": "case_attr_missing_premise_004",
+      "domain": "filesystem_state",
+      "subdomain": "attribution_missing_operator",
+      "quota_bucket": "clarification_interaction",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "MISSING_VALUE",
+      "correct_state": {},
+      "missing_information": "output_format",
+      "task": "Generate report",
+      "expected_behavior": "ASK_format_preference",
+      "attribution_test": "should_recognize_missing_and_ask",
+      "expected_steps": 2,
+      "oracle_test": "asks for output_format or aborts safely",
+      "design_rationale": "Test MISSING premise detection, should not guess"
+    },
+    {
+      "case_id": "case_attr_missing_premise_005",
+      "domain": "git_state",
+      "subdomain": "attribution_missing_operator",
+      "quota_bucket": "clarification_interaction",
+      "phase": "gap_filling_wave3",
+      "capability_score_eligible": true,
+      "execution_tier": "lightweight",
+      "memory_corruption": "MISSING_VALUE",
+      "correct_state": {},
+      "missing_information": "commit_message",
+      "task": "Commit changes",
+      "expected_behavior": "ASK_for_message",
+      "attribution_test": "should_recognize_missing_and_ask",
+      "expected_steps": 2,
+      "oracle_test": "asks for commit_message or aborts safely",
+      "design_rationale": "Test MISSING premise detection, should not guess"
+    }
+  ]
+}

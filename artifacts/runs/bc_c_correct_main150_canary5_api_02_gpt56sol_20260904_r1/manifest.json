@@ -1,0 +1,410 @@
+{
+  "schema_version": "statewise-experiment-manager-v1",
+  "run_id": "bc_c_correct_main150_canary5_api_02_gpt56sol_20260904_r1",
+  "status": "COMPLETE",
+  "created_at": "2026-09-04T12:55:53.622035+00:00",
+  "updated_at": "2026-09-04T13:07:29.388075+00:00",
+  "config_fingerprint": "sha256:ad644b3cfcb046f79bfaa118022671db1546d579397eadae1fcae3587938c05c",
+  "experiment_config": {
+    "kind": "statewise_managed_pilot",
+    "model": "gpt-5.6-sol",
+    "base_url": "https://api.example.invalid/v1",
+    "temperature": 0.0,
+    "seed": null,
+    "api_profile": "api_02",
+    "requested_api_profiles": [
+      "api_02"
+    ],
+    "provider_profiles": [
+      "api_02"
+    ],
+    "fake_api": false,
+    "arms": [
+      "safety_sentry",
+      "memlineage_trust",
+      "ask_or_assume",
+      "critic_tool_grounded"
+    ],
+    "arm_registry": {
+      "correct": {
+        "md_id": "B0",
+        "label": "Correct-Memory Oracle",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "correct",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "no_memory": {
+        "md_id": "B1",
+        "label": "No Memory",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "no_memory",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "auto_execute": {
+        "md_id": "B2",
+        "label": "Auto Execute",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "bare_approval": {
+        "md_id": "B3",
+        "label": "Bare Action Approval",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "rationale_approval": {
+        "md_id": "B4",
+        "label": "Rationale-Augmented Approval",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "plan_approval": {
+        "md_id": "B5",
+        "label": "Plan-Level Approval",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred until the agent exposes an executable multi-step plan contract"
+      },
+      "generic_clarification": {
+        "md_id": "B6",
+        "label": "Generic Clarification",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "ask_or_assume": {
+        "md_id": "B7",
+        "label": "Ask-or-Assume Clean-Room Reproduction",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding Agents (arXiv:2603.26233)",
+          "implementation_fidelity": "clean_room_task_uncertainty_router_no_paper_checkpoint",
+          "decision_unit": "task_and_proposal_underspecification",
+          "persistent_state_provenance": false,
+          "memory_repair": false,
+          "decision_critical_state_detection": false,
+          "question_budget": 2
+        }
+      },
+      "safety_sentry": {
+        "md_id": "B8",
+        "label": "Safety Sentry Zero-Shot Reproduction",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "arXiv:2607.13594",
+          "artifact": "https://anonymous.4open.science/r/SAFETY-SENTRY-D62D/",
+          "implementation_fidelity": "paper_prompt_zero_shot_no_released_lora_checkpoint",
+          "paper_checkpoint_available": false,
+          "paper_base_model": "Qwen3.5-4B",
+          "paper_training": "LoRA SFT on 7,767 released instances",
+          "paper_balanced_threshold": 0.68,
+          "threshold_reproduced": false,
+          "output_contract_adaptation": "paper leading decision token represented as a JSON decision field for the shared OpenAI-compatible client",
+          "reason": "The released repository contains data only. The configured API model neither has the paper's LoRA adapter nor its three trained decision-token logits, so the decoding-time threshold is not available."
+        }
+      },
+      "voi_clarification": {
+        "md_id": "B9",
+        "label": "VoI Clarification",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred to Tier 2 after human-cost calibration"
+      },
+      "verify_only": {
+        "md_id": "B10",
+        "label": "Verify Only",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred to the ablation phase"
+      },
+      "memlineage_trust": {
+        "md_id": "B11",
+        "label": "MemLineage-Style Trusted-Lineage Gate",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "MemLineage: Lineage-Guided Enforcement for LLM Agent Memory (arXiv:2605.14421)",
+          "implementation_fidelity": "clean_room_style_gate_without_cryptographic_signatures",
+          "cryptographic_origin_binding": false,
+          "lineage_propagation": "max_untrusted_ancestry",
+          "dispatch_policy": "block_sensitive_action_on_untrusted_justification",
+          "does_not_check": [
+            "memory_factual_correctness",
+            "freshness",
+            "state_verification"
+          ]
+        }
+      },
+      "live_refresh": {
+        "md_id": null,
+        "label": "Simple Live State Refresh",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "critic_tool_grounded": {
+        "md_id": "B13",
+        "label": "CRITIC-Style Tool-Grounded Self-Correction",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "arXiv:2305.11738",
+          "official_code": "https://github.com/microsoft/ProphetNet/tree/master/CRITIC",
+          "implementation_fidelity": "critic_style_clean_room_structured_action_adaptation",
+          "paper_checkpoint_required": false,
+          "shared_core": "verify with external tools, then correct from critique",
+          "adaptation": "free-form answer becomes one structured coding action; task-local read-only tools are pre-specified; the configured benchmark model performs both critique and correction",
+          "max_critique_cycles": 2,
+          "persistent_memory_repair": false,
+          "oracle_access": false
+        }
+      },
+      "oracle_statewise": {
+        "md_id": "B12",
+        "label": "Oracle StateWise",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": true,
+        "reason": null,
+        "implementation": {
+          "contract": "direct_decision_critical_state_truth_before_replan",
+          "privileged_inputs": [
+            "oracle_support_states",
+            "ground_truth_state(s)"
+          ],
+          "pairing": "preserve_shared_corrupted_initial_proposal",
+          "repair": "suppress_applicable_same_key_stale_records_then_scoped_insert",
+          "post_repair_policy": "existing_state_action_and_residual_permission_gates",
+          "privilege_isolation": "oracle_arm_only"
+        }
+      },
+      "corrupted": {
+        "md_id": null,
+        "label": "Untreated Corrupted Control",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "statewise_v1": {
+        "md_id": null,
+        "label": "StateWise-v1",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "statewise_v2_retrieval": {
+        "md_id": null,
+        "label": "StateWise-v2 Retrieval",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "retrieval",
+          "method_name": "StateWise-v2+DecisionAwareRetrieval",
+          "fingerprint": "sha256:9bc2ea669f2aa296ad80775dc0e78d1e324252daf852b745b2fc3f221e6a08fb",
+          "base": "frozen StateWise-v1",
+          "oracle_assisted": false
+        }
+      },
+      "v1_no_attribution": {
+        "md_id": null,
+        "label": "StateWise-final − Attribution",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "v1_no_repair": {
+        "md_id": null,
+        "label": "StateWise-final − Persistent Repair",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "v1_no_counterfactual": {
+        "md_id": null,
+        "label": "StateWise-final − Counterfactual",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null
+      }
+    },
+    "trials": 1,
+    "selected_cases": [
+      "case_w1_agent_safety_tool_harm_confused_deputy_010_textual",
+      "case_w1_agent_safety_tool_harm_confused_deputy_011_vite",
+      "case_w1_agent_safety_tool_harm_confused_deputy_012_spring_petclinic",
+      "case_w1_agent_safety_tool_harm_external_tool_state_013_fastapi",
+      "case_w1_agent_safety_tool_harm_external_tool_state_014_rich"
+    ],
+    "excluded_non_executable": [],
+    "statewise_v1_freeze": {
+      "valid": true,
+      "fingerprint": "ATTRIBUTION_OPT_V1",
+      "changed_files": [
+        "attribution.py"
+      ],
+      "unexpected_manifest_files": []
+    },
+    "measurement_code_fingerprints": {
+      "scaffold/runners/run_managed_pilot.py": "5aed0cf5732c933c3626f4450f0304c316d99c29856cefb503e7e380ed998f28",
+      "scaffold/statewise/experiments/pilot_conditions.py": "fae3eac92873939b672b1fefab09f7b362ea4a291b94f4652ca4c3ae5285b334\n",
+      "scaffold/statewise/experiments/attribution_v2.py": "4e29eb36ec0b379893841435f553abcd0aaf47d07d7f5a191da6ad983350dbba",
+      "scaffold/statewise/experiments/baseline_interactions.py": "6f22a8d08949ab5d78d6c47015c420f1d2fb0014195fa209ce466854c2b72253",
+      "scaffold/statewise/experiments/safety_sentry_baseline.py": "c3131e2ae925ab1a3a0515b457b3d5f583328c495998eac161786cbdc651d8aa\n",
+      "scaffold/statewise/experiments/memlineage_baseline.py": "ef60a14db22b31b75ebc9c0d6df3e0c884a3003992d221eca65eec55e3d0ba46\n",
+      "scaffold/statewise/experiments/live_refresh_baseline.py": "f93a86b3335052f84f868489684b314ba1610e16cfc0bc29eb312028989be118\n",
+      "scaffold/statewise/experiments/critic_tool_grounded_baseline.py": "b36ff46b48e87b00e59656fc03d56474460113475dc4899ee0dce45ff48f328d\n",
+      "scaffold/statewise/experiments/experiment_manager.py": "2b05cd10ae93fb3e4b376852794bd7cc9c9564e23ed4b69ffd28bf05bf56d0cc",
+      "scaffold/statewise/runtime/lightweight_runtime.py": "24ba04f909fbabb78ba758ecad857725aa02b3b9fa99a2010923476a0f0764b4"
+    },
+    "shared_proposal_arms": [
+      "ask_or_assume",
+      "critic_tool_grounded",
+      "memlineage_trust",
+      "safety_sentry"
+    ],
+    "shared_proposal_cost_policy": "separate_setup_bucket",
+    "runtime_concurrency": 4
+  },
+  "dataset": {
+    "valid": true,
+    "snapshot_id": "bc_correct_main150_v1",
+    "snapshot_path": "artifacts/datasets/4291cd21e7a54aea/snapshot.json",
+    "snapshot_sha256": "4291cd21e7a54aeaea782156acdf3e1356a6c1240de7b4cc4e3b134216cdeace",
+    "cases_root": "artifacts/datasets/4291cd21e7a54aea\\cases",
+    "case_count": 150,
+    "errors": []
+  },
+  "manager": {
+    "max_concurrency": 4,
+    "retry_policy": {
+      "max_attempts": 5,
+      "initial_backoff_seconds": 2,
+      "backoff_multiplier": 2.0,
+      "max_backoff_seconds": 30,
+      "retryable_failures": [
+        "api.connection",
+        "api.rate_limit",
+        "api.request",
+        "api.server",
+        "api.timeout",
+        "model.response_contract",
+        "process.interrupted"
+      ]
+    },
+    "provider_profiles": [
+      "api_02"
+    ],
+    "workspace_layout": "workspaces/<episode_id>/attempt-NNN/"
+  },
+  "aggregate": {
+    "episodes": 20,
+    "attempts": 20,
+    "status_counts": {
+      "SUCCEEDED": 20
+    },
+    "failure_counts": {},
+    "by_condition": {
+      "safety_sentry": {
+        "SUCCEEDED": 5
+      },
+      "memlineage_trust": {
+        "SUCCEEDED": 5
+      },
+      "ask_or_assume": {
+        "SUCCEEDED": 5
+      },
+      "critic_tool_grounded": {
+        "SUCCEEDED": 5
+      }
+    },
+    "usage": {
+      "calls": 137,
+      "failed_calls": 0,
+      "prompt_tokens": 247160,
+      "completion_tokens": 37581,
+      "total_tokens": 284739,
+      "latency_seconds": 2117.4535,
+      "cost_usd": 0.0
+    }
+  },
+  "finished_at": "2026-09-04T13:07:29.388075+00:00",
+  "anonymous_repackaging": {
+    "original_manifest_sha256": "aee1f31b9a7125f80e19bdc3c483c0f862d5f3ba49c782a3cba55d398057174e",
+    "historical_fingerprints_preserved": true,
+    "episode_storage": "Split from original manifest or existing checkpoints; no experiment rerun.",
+    "episodes_index": "episode_index.json",
+    "episode_count": 20
+  }
+}

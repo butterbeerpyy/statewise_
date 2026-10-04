@@ -1,0 +1,33 @@
+{
+  "reliability_model": "source x confidence x scope x conflict x freshness (scaffold/statewise/core/reliability.py)",
+  "continue_threshold": 0.6,
+  "trust_bundles": {
+    "low": {
+      "source": "agent_inference",
+      "confidence": "low",
+      "recent": false
+    },
+    "high": {
+      "source": "user_confirmed",
+      "confidence": "high",
+      "recent": true
+    },
+    "untrusted": {
+      "source": "external:web_search",
+      "confidence": "low",
+      "recent": false
+    }
+  },
+  "expected_reliability": {
+    "low": "~0.03-0.11 (frozen setting; router attempts resolution)",
+    "high": "0.900 (router takes reliability-only CONTINUE)",
+    "untrusted": "~0.03 (router resolves; MemLineage gate fires)"
+  },
+  "prereg_predictions": {
+    "HS_vs_LS": "StateWise objective correctness drops materially in HS, because route.py returns CONTINUE before resolution.",
+    "HC": "Arms that survive HS by distrusting everything must pay in unnecessary questions or mutations here.",
+    "LC": "No arm should manufacture a repair when the record is correct.",
+    "US": "MemLineage refuses, demonstrating the gate is live; whether refusal also prevents task completion is the point of interest."
+  },
+  "not_pooled_with": "frozen 150-case headline matrix"
+}

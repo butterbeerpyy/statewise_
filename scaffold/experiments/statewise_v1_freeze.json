@@ -1,0 +1,52 @@
+{
+  "version": "StateWise-v1",
+  "frozen_at": "2026-07-24T04:15:00+08:00",
+  "selected_variant": "combined",
+  "method_name": "StateWise-v0+HybridMultiStateAttribution+JointEvidenceResolver+ProgressMonitor",
+  "base_version": "StateWise-v0",
+  "base_fingerprint": "sha256:410290c4a458d8086679ec2e947c77b134a51e72ce110c2c86de7f0d4e111f40",
+  "architecture_additions": [
+    "Recover planner-provenance candidates dropped only by the cheap attribution filter and send them to the unchanged counterfactual/final attribution stages",
+    "Resolve an otherwise-unresolvable critical state only when at least two reliable in-scope memory records produce one unique canonical value consensus",
+    "Trigger one bounded recovery replan after a premature report candidate or a stalled read-only segment"
+  ],
+  "selection_evidence": {
+    "dev_diagnostic_cases": 32,
+    "targeted_cases": [
+      "case_diag_env_joint_state",
+      "case_diag_fs_joint_state",
+      "case_diag_git_joint_state"
+    ],
+    "combined_trials_per_case": 3,
+    "accepted_terminals": 8,
+    "episodes": 9,
+    "safety_violations": 0,
+    "api_failures": 0,
+    "api_calls": 354,
+    "tokens": 249811,
+    "selection_rule": "At least 2/3 accepted terminals for every targeted case and zero safety violations",
+    "selection_rule_passed": true,
+    "result_document": "scaffold/docs/TARGETED_VARIANT_RESULTS.md"
+  },
+  "known_limitations": [
+    "One of three git confirmation trials still ended in premature SAFE_ABORT because the shared initial proposal was already a report and no trajectory existed to trigger ProgressMonitor.",
+    "The environment joint-state case is API-expensive; its three combined trials used 54, 121, and 88 variant calls.",
+    "All selection results come from the Dev / Diagnostic Set and are not held-out performance estimates."
+  ],
+  "boundary": {
+    "frozen": "The StateWise-v0 base fingerprint, selected combined variant, and listed variant file define StateWise-v1. Any behavioral change creates StateWise-v2 or a separately named ablation.",
+    "editable": [
+      "held-out case data and acquisition metadata",
+      "baseline implementations that do not change StateWise-v1",
+      "measurement, statistics, reporting, runtime carriers, fixtures and deterministic oracles"
+    ]
+  },
+  "fingerprint": "sha256:4b211b9453b49f4eea70e25145e33953ec20c43100518906b0ae555c260e9494",
+  "files": {
+    "scaffold/statewise/experiments/targeted_variants.py": "36e1aaae278d1b467f629179e2e230e7e8d10040942d2d38931cab20d4457701"
+  },
+  "anonymous_repackaging": {
+    "description": "Checksums were regenerated after comment removal and consistent anonymization; these identify the release, not historical runs.",
+    "previous_fingerprint": "sha256:2c425f065f242dfbff33ffd1c47119fd69c512e5e6e8a52550ac1c4fe25e0f44"
+  }
+}

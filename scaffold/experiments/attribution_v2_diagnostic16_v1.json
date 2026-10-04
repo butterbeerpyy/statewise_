@@ -1,0 +1,75 @@
+{
+  "schema_version": "statewise-attribution-v2-diagnostic-selection-v1",
+  "selection_id": "attribution_v2_diagnostic16_v1",
+  "created_at": "2026-07-31T02:42:00+08:00",
+  "purpose": "Action-aligned dev/diagnostic gate for StateWise-v2 Retrieval; not held-out or headline evaluation.",
+  "selection_rule": [
+    "Start with the four predeclared controlled cases covering v1-empty retrieval, semantic decoy, environment scope, and Git multi-state.",
+    "Add twelve cases before execution, stratified across D3/D4, incomplete trace/provenance, stale plan, semantic decoy, multi-state, filesystem, Git, environment, cross-session state, implicit conflict, and O1-O4 observability.",
+    "Use only existing dev/diagnostic, harder-pilot, or Batch-2 cases from the frozen 224-case snapshot.",
+    "Do not select on StateWise-v2 outcomes and do not use held-out/headline reserve cases."
+  ],
+  "provider": "api_03_gpt55",
+  "model": "gpt-5.5",
+  "proposal_mode": "annotated_action",
+  "trials": 1,
+  "statewise_v1_fingerprint": "sha256:2c425f065f242dfbff33ffd1c47119fd69c512e5e6e8a52550ac1c4fe25e0f44",
+  "statewise_v2_retrieval_fingerprint": "sha256:9bc2ea669f2aa296ad80775dc0e78d1e324252daf852b745b2fc3f221e6a08fb",
+  "gate4_cases": [
+    "case_fs2_petclinic_site_reports",
+    "case_diag_fs_semantic_decoy",
+    "case_hard_env_release_matrix",
+    "case_hard_git_multistate_release"
+  ],
+  "incremental_gate12_cases": [
+    "case_diag_env_incomplete_trace",
+    "case_diag_env_joint_state",
+    "case_diag_env_stale_plan",
+    "case_diag_fs_incomplete_provenance",
+    "case_diag_fs_joint_state",
+    "case_diag_git_semantic_decoy",
+    "case_diag_git_joint_state",
+    "case_env2_fastapi_implicit",
+    "case_git2_rich_docs_target",
+    "case_hard_env_backend_conflict",
+    "case_hard_fs_cross_session_deploy",
+    "case_git2_flask_implicit"
+  ],
+  "coverage": {
+    "domains": [
+      "environment_state",
+      "user_private_semantics",
+      "filesystem_state",
+      "git_state"
+    ],
+    "observability": [
+      "O1",
+      "O2",
+      "O3",
+      "O4"
+    ],
+    "causal_depth": [
+      "D2",
+      "D3",
+      "D4"
+    ],
+    "diagnostic_features": [
+      "v1_empty_candidate",
+      "semantic_decoy",
+      "multi_state",
+      "incomplete_trace",
+      "incomplete_provenance",
+      "stale_plan",
+      "cross_session_contamination",
+      "implicit_conflict",
+      "counterfactual_instability",
+      "action_contract_alignment"
+    ]
+  },
+  "aggregation": {
+    "v1_gate4_source": "runs/attribution_v2_compare/attr-v2-gate4-api_03-gpt55-20260731-iter1.json",
+    "v2_gate4_source": "runs/attribution_v2_compare/attr-v2-gate4-api_03-gpt55-20260731-iter2.json",
+    "incremental_gate12_run_id": "attr-v2-gate12-api_03-gpt55-20260731",
+    "note": "The four successful v1/v2 episodes are reused; the incremental run executes only the twelve not-yet-run cases."
+  }
+}

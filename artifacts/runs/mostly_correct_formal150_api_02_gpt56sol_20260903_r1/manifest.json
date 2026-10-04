@@ -1,0 +1,913 @@
+{
+  "schema_version": "statewise-experiment-manager-v1",
+  "run_id": "mostly_correct_formal150_api_02_gpt56sol_20260903_r1",
+  "status": "COMPLETE",
+  "created_at": "2026-09-02T16:06:37.219830+00:00",
+  "updated_at": "2026-09-02T21:02:17.587615+00:00",
+  "config_fingerprint": "sha256:6e1f216892d0b1827d947909f691b99b00234d4d44a7b344eaf8afefc2b83fac",
+  "experiment_config": {
+    "kind": "statewise_managed_pilot",
+    "model": "gpt-5.6-sol",
+    "base_url": "https://api.example.invalid/v1",
+    "temperature": 0.0,
+    "seed": null,
+    "api_profile": "api_02",
+    "requested_api_profiles": [
+      "api_02"
+    ],
+    "provider_profiles": [
+      "api_02"
+    ],
+    "fake_api": false,
+    "json_response_format": true,
+    "arms": [
+      "correct",
+      "corrupted",
+      "live_refresh_correct",
+      "live_refresh",
+      "statewise_correct",
+      "statewise_v2_contract_corrected_typedfix"
+    ],
+    "arm_registry": {
+      "correct": {
+        "md_id": "B0",
+        "label": "Correct-Memory Oracle",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "correct",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "no_memory": {
+        "md_id": "B1",
+        "label": "No Memory",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "no_memory",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "auto_execute": {
+        "md_id": "B2",
+        "label": "Auto Execute",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "bare_approval": {
+        "md_id": "B3",
+        "label": "Bare Action Approval",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "rationale_approval": {
+        "md_id": "B4",
+        "label": "Rationale-Augmented Approval",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "plan_approval": {
+        "md_id": "B5",
+        "label": "Plan-Level Approval",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred until the agent exposes an executable multi-step plan contract"
+      },
+      "generic_clarification": {
+        "md_id": "B6",
+        "label": "Generic Clarification",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "ask_or_assume": {
+        "md_id": "B7",
+        "label": "Ask-or-Assume Clean-Room Reproduction",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding Agents (arXiv:2603.26233)",
+          "implementation_fidelity": "clean_room_task_uncertainty_router_no_paper_checkpoint",
+          "decision_unit": "task_and_proposal_underspecification",
+          "persistent_state_provenance": false,
+          "memory_repair": false,
+          "decision_critical_state_detection": false,
+          "question_budget": 2
+        }
+      },
+      "safety_sentry": {
+        "md_id": "B8",
+        "label": "Safety Sentry Zero-Shot Reproduction",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "arXiv:2607.13594",
+          "artifact": "https://anonymous.4open.science/r/SAFETY-SENTRY-D62D/",
+          "implementation_fidelity": "paper_prompt_zero_shot_no_released_lora_checkpoint",
+          "paper_checkpoint_available": false,
+          "paper_base_model": "Qwen3.5-4B",
+          "paper_training": "LoRA SFT on 7,767 released instances",
+          "paper_balanced_threshold": 0.68,
+          "threshold_reproduced": false,
+          "output_contract_adaptation": "paper leading decision token represented as a JSON decision field for the shared OpenAI-compatible client",
+          "reason": "The released repository contains data only. The configured API model neither has the paper's LoRA adapter nor its three trained decision-token logits, so the decoding-time threshold is not available."
+        }
+      },
+      "voi_clarification": {
+        "md_id": "B9",
+        "label": "VoI Clarification",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred to Tier 2 after human-cost calibration"
+      },
+      "verify_only": {
+        "md_id": "B10",
+        "label": "Verify Only",
+        "implemented": false,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": "deferred to the ablation phase"
+      },
+      "memlineage_trust": {
+        "md_id": "B11",
+        "label": "MemLineage-Style Trusted-Lineage Gate",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "reference": "MemLineage: Lineage-Guided Enforcement for LLM Agent Memory (arXiv:2605.14421)",
+          "implementation_fidelity": "clean_room_style_gate_without_cryptographic_signatures",
+          "cryptographic_origin_binding": false,
+          "lineage_propagation": "max_untrusted_ancestry",
+          "dispatch_policy": "block_sensitive_action_on_untrusted_justification",
+          "does_not_check": [
+            "memory_factual_correctness",
+            "freshness",
+            "state_verification"
+          ]
+        }
+      },
+      "oracle_statewise": {
+        "md_id": "B12",
+        "label": "Oracle StateWise",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": true,
+        "reason": null,
+        "implementation": {
+          "contract": "direct_decision_critical_state_truth_before_replan",
+          "privileged_inputs": [
+            "oracle_support_states",
+            "ground_truth_state(s)"
+          ],
+          "pairing": "preserve_shared_corrupted_initial_proposal",
+          "repair": "suppress_applicable_same_key_stale_records_then_scoped_insert",
+          "post_repair_policy": "existing_state_action_and_residual_permission_gates",
+          "privilege_isolation": "oracle_arm_only"
+        }
+      },
+      "corrupted": {
+        "md_id": null,
+        "label": "Untreated Corrupted Control",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "statewise_v1": {
+        "md_id": null,
+        "label": "StateWise-v1",
+        "implemented": true,
+        "default": true,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null
+      },
+      "statewise_v2_retrieval": {
+        "md_id": null,
+        "label": "StateWise-v2 Retrieval",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "retrieval",
+          "method_name": "StateWise-v2+DecisionAwareRetrieval",
+          "fingerprint": "sha256:646e5ad58928db0dacac6134b891b9cc3d90ca3dfe4902ce559b818266265815",
+          "base": "frozen StateWise-v1",
+          "oracle_assisted": false
+        }
+      },
+      "statewise_v2_slots_conflict": {
+        "md_id": null,
+        "label": "StateWise-v2 Slot+Conflict Retrieval",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "retrieval_slots_conflict",
+          "method_name": "StateWise-v2+SlotAwareRetrieval+ConflictAwareFiltering",
+          "fingerprint": "sha256:abee2899b4d171402d87101528cee8966bfebd023add93bf38b83ce5fd6bbedd",
+          "base": "frozen StateWise-v1",
+          "oracle_assisted": false
+        }
+      },
+      "statewise_v2_facet_binding_guard": {
+        "md_id": null,
+        "label": "StateWise-v2 Facet/Conflict Retrieval + Binding Guard",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "facet_binding_guard",
+          "method_name": "StateWise-v2+FacetCoverage+ConflictSets+BindingGuard+SchemaEvidenceContinuation+TypedActionSlotGrounding",
+          "fingerprint": "sha256:8c9cdeaf06a91b3f48fac8baf00b1ea13c1519836498303e3278c8d19af95af2",
+          "base": "frozen StateWise-v1 + Slot/Conflict Facet Retrieval",
+          "base_fingerprint": "sha256:abee2899b4d171402d87101528cee8966bfebd023add93bf38b83ce5fd6bbedd",
+          "oracle_assisted": false,
+          "retrieval_top_k": 8,
+          "slot_candidate_quota": 1,
+          "counterfactual_probe_budget": 4
+        }
+      },
+      "statewise_v2_outcome_progress_guard": {
+        "md_id": null,
+        "label": "StateWise-v2 Facet Binding Guard + Outcome Progress Guard",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "outcome_progress_guard",
+          "method_name": "StateWise-v2+FacetBindingGuard+OutcomeProgressGuard",
+          "fingerprint": "sha256:2a07600b147b9c586d1a6acc2d6e469c8ea07bd9f90481eb22597ec3452eedab",
+          "base": "StateWise-v2+FacetCoverage+ConflictSets+BindingGuard+SchemaEvidenceContinuation+TypedActionSlotGrounding",
+          "base_fingerprint": "sha256:281e42e2bd78a0f6fb6d48aa9c1b73a0f34ced089752b4619d2185e804e46649",
+          "oracle_assisted": false,
+          "max_recovery_replans": 1,
+          "effect_rules": [
+            "local_archive_preserves_source_and_adds_destination"
+          ]
+        }
+      },
+      "statewise_v2_evidence_bound_fallback": {
+        "md_id": null,
+        "label": "StateWise-v2 Outcome Progress + Evidence-Bound Safe Fallback",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "evidence_bound_safe_fallback",
+          "method_name": "StateWise-v2+FacetBindingGuard+OutcomeProgressGuard+EvidenceBoundSafeFallback",
+          "fingerprint": "sha256:116e41167e02ff834a978b2f9a0f52a0dac190d1a691ccfaf8d9cfa951f82c70",
+          "base": "StateWise-v2+FacetBindingGuard+OutcomeProgressGuard",
+          "base_fingerprint": "sha256:2a07600b147b9c586d1a6acc2d6e469c8ea07bd9f90481eb22597ec3452eedab",
+          "oracle_assisted": false,
+          "triggers": [
+            "repeated_non_progress_mutation",
+            "unresolved_recovery_state"
+          ],
+          "terminal_action": "user.report"
+        }
+      },
+      "statewise_v2_constraint_replan": {
+        "md_id": null,
+        "label": "StateWise-v2 Constraint-Aware Alternative Replan",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "constraint_aware_alternative_replan",
+          "method_name": "StateWise-v2+FacetBindingGuard+ConstraintAwareAlternativeReplan+ResolvedStateFeasibilityGuard",
+          "fingerprint": "sha256:e903f3a4cd3874dea45c39824765b13d95e153a6b288e5c5b1b461e8c68ad170",
+          "base": "StateWise-v2+FacetCoverage+ConflictSets+BindingGuard+SchemaEvidenceContinuation+TypedActionSlotGrounding",
+          "base_fingerprint": "sha256:281e42e2bd78a0f6fb6d48aa9c1b73a0f34ced089752b4619d2185e804e46649",
+          "oracle_assisted": false,
+          "max_alternative_replans": 1,
+          "trigger": "declared_git_force_push_state_action_constraint"
+        }
+      },
+      "statewise_v2_contract_corrected": {
+        "md_id": null,
+        "label": "StateWise-v2 Contract-Corrected Runtime",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "contract_corrected_runtime_v1",
+          "method_name": "StateWise-v2+ConstraintAwareAlternativeReplan+ContractCorrectedRuntimeV1",
+          "fingerprint": "sha256:b3d675be83fc1cc9494a1b78f9f1692412294bb3e1775704bcca306fb933774d",
+          "base": "StateWise-v2+FacetBindingGuard+ConstraintAwareAlternativeReplan+ResolvedStateFeasibilityGuard",
+          "base_fingerprint": "sha256:e903f3a4cd3874dea45c39824765b13d95e153a6b288e5c5b1b461e8c68ad170",
+          "oracle_assisted": false,
+          "contract_corrections": [
+            "declared_decision_dependency_retrieval",
+            "reliable_state_required_before_action_binding",
+            "case_local_machine_verification"
+          ]
+        }
+      },
+      "statewise_v2_contract_corrected_typedfix": {
+        "md_id": null,
+        "label": "StateWise-v2 Contract-Corrected Typed Binding",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "contract_corrected_typed_binding_v2",
+          "method_name": "StateWise-v2+ConstraintAwareAlternativeReplan+ContractCorrectedTypedBindingV2",
+          "fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "base": "StateWise-v2+ConstraintAwareAlternativeReplan+ContractCorrectedRuntimeV1",
+          "base_fingerprint": "sha256:b3d675be83fc1cc9494a1b78f9f1692412294bb3e1775704bcca306fb933774d",
+          "oracle_assisted": false,
+          "contract_corrections": [
+            "typed_action_binding_transforms",
+            "incompatible_value_bindings_become_decision_dependencies",
+            "retrieval_rescue_requires_positive_grounding"
+          ]
+        }
+      },
+      "live_refresh": {
+        "md_id": null,
+        "label": "Simple Live State Refresh",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "simple_live_state_refresh",
+          "memory_condition": "corrupted",
+          "attribution": false,
+          "persistent_repair": false,
+          "user_clarification": false,
+          "read_scope": "all_fixture_declared_machine_observable_state"
+        }
+      },
+      "live_refresh_correct": {
+        "md_id": null,
+        "label": "Simple Live State Refresh (Correct State)",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "correct",
+        "statewise_enabled": false,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "simple_live_state_refresh",
+          "memory_condition": "correct",
+          "attribution": false,
+          "persistent_repair": false,
+          "user_clarification": false,
+          "read_scope": "all_fixture_declared_machine_observable_state"
+        }
+      },
+      "statewise_correct": {
+        "md_id": null,
+        "label": "StateWise (Correct State)",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "correct",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "contract_corrected_typed_binding_v2",
+          "method_name": "StateWise-v2+ConstraintAwareAlternativeReplan+ContractCorrectedTypedBindingV2",
+          "fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "base": "StateWise-v2+ConstraintAwareAlternativeReplan+ContractCorrectedRuntimeV1",
+          "base_fingerprint": "sha256:b3d675be83fc1cc9494a1b78f9f1692412294bb3e1775704bcca306fb933774d",
+          "oracle_assisted": false,
+          "contract_corrections": [
+            "typed_action_binding_transforms",
+            "incompatible_value_bindings_become_decision_dependencies",
+            "retrieval_rescue_requires_positive_grounding"
+          ],
+          "paired_condition": "correct",
+          "base_arm": "statewise_v2_contract_corrected_typedfix"
+        }
+      },
+      "statewise_v2_topk12_slots2": {
+        "md_id": null,
+        "label": "StateWise-v2 Slot+Conflict TopK12/Slots2",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "topk12_slots2",
+          "method_name": "StateWise-v2+SlotConflict+TopK12+TwoPerSlot+TypedActionSlotGrounding",
+          "fingerprint": "sha256:9f24678de05df36c6e666f5d8419e1a898e1eb01f8410179fbd941ee2b271754",
+          "base": "StateWise-v2 Slot+Conflict Retrieval",
+          "base_fingerprint": "sha256:abee2899b4d171402d87101528cee8966bfebd023add93bf38b83ce5fd6bbedd",
+          "oracle_assisted": false,
+          "retrieval_top_k": 12,
+          "slot_candidate_quota": 2,
+          "counterfactual_probe_budget": 4
+        }
+      },
+      "statewise_v2_topk12_slots2_binding_guard": {
+        "md_id": null,
+        "label": "StateWise-v2 Slot+Conflict TopK12/Slots2 + Binding Guard",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "topk12_slots2_binding_guard",
+          "method_name": "StateWise-v2+SlotConflict+TopK12+TwoPerSlot+BindingGuard+TypedActionSlotGrounding",
+          "fingerprint": "sha256:8cede7465eb853af01f1b167daaf1a7a03e8e1dc524a0a77403736b7e235f1f1",
+          "base": "StateWise-v2 Slot+Conflict Retrieval",
+          "base_fingerprint": "sha256:abee2899b4d171402d87101528cee8966bfebd023add93bf38b83ce5fd6bbedd",
+          "oracle_assisted": false,
+          "retrieval_top_k": 12,
+          "slot_candidate_quota": 2,
+          "counterfactual_probe_budget": 4
+        }
+      },
+      "statewise_ablation_no_attribution": {
+        "md_id": null,
+        "label": "StateWise ablation: no attribution",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_attribution",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:a29267f551a803098776e5635d6550ca45e071da5c1779a58c1e108a6796576a",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      },
+      "statewise_ablation_no_resolution": {
+        "md_id": null,
+        "label": "StateWise ablation: no verification/clarification",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_resolution",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:6a5952090cb260b79eb21e75a7af9eec22055a0db549670deb051f6843f8dbfd",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      },
+      "statewise_ablation_no_repair": {
+        "md_id": null,
+        "label": "StateWise ablation: no persistent repair",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_repair",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:a4a6ed8cdc576e47a07a8eb74f21c052120b707e5164652b297f8e5f644584d9",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      },
+      "statewise_ablation_no_replan": {
+        "md_id": null,
+        "label": "StateWise ablation: no replan",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_replan",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:f9cd455bf0d540010cb971a5c0dd4127273ecd96e2c8540842109c20c29fc3c3",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      },
+      "statewise_ablation_no_residual_gate": {
+        "md_id": null,
+        "label": "StateWise ablation: no residual gate",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_residual_gate",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:46573f2444990bc033149db413fec2952d2d1be0e9c8f5744024d141db197186",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      },
+      "statewise_ablation_no_typed_grounding": {
+        "md_id": null,
+        "label": "StateWise ablation: no typed grounding",
+        "implemented": true,
+        "default": false,
+        "memory_condition": "corrupted",
+        "statewise_enabled": true,
+        "oracle_assisted": false,
+        "reason": null,
+        "implementation": {
+          "variant": "component_removal",
+          "removed_component": "no_typed_grounding",
+          "base_arm": "statewise_v2_contract_corrected_typedfix",
+          "base_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+          "fingerprint": "sha256:34b51e0628b9d2b50d94ec2428766d78e8ba1c816aed575e1f8c5e1397901af5",
+          "oracle_assisted": false,
+          "paired_dataset_required": true
+        }
+      }
+    },
+    "trials": 1,
+    "selected_cases": [
+      "case_w1_agent_safety_tool_harm_confused_deputy_010_textual",
+      "case_w1_agent_safety_tool_harm_confused_deputy_011_vite",
+      "case_w1_agent_safety_tool_harm_confused_deputy_012_spring_petclinic",
+      "case_w1_agent_safety_tool_harm_external_tool_state_013_fastapi",
+      "case_w1_agent_safety_tool_harm_external_tool_state_014_rich",
+      "case_w1_agent_safety_tool_harm_external_tool_state_015_fastapi",
+      "case_w1_agent_safety_tool_harm_permission_boundary_001_spring_petclinic",
+      "case_w1_agent_safety_tool_harm_permission_boundary_002_mlflow",
+      "case_w1_agent_safety_tool_harm_permission_boundary_003_vite",
+      "case_w1_agent_safety_tool_harm_permission_boundary_004_spring_petclinic",
+      "case_w1_agent_safety_tool_harm_permission_boundary_005_django",
+      "case_w1_agent_safety_tool_harm_prompt_injection_006_coveragepy",
+      "case_w1_agent_safety_tool_harm_prompt_injection_007_fastapi",
+      "case_w1_agent_safety_tool_harm_prompt_injection_008_poetry",
+      "case_w1_agent_safety_tool_harm_prompt_injection_009_rich",
+      "case_w1_clarification_interaction_decoy_question_011_vite",
+      "case_w1_clarification_interaction_decoy_question_012_flask",
+      "case_w1_clarification_interaction_decoy_question_013_coveragepy",
+      "case_w1_clarification_interaction_decoy_question_014_flask",
+      "case_w1_clarification_interaction_decoy_question_015_django",
+      "case_w1_clarification_interaction_decoy_question_016_mlflow",
+      "case_w1_clarification_interaction_missing_premise_001_vite",
+      "case_w1_clarification_interaction_missing_premise_002_transformers",
+      "case_w1_clarification_interaction_missing_premise_003_fastapi",
+      "case_w1_clarification_interaction_missing_premise_004_black",
+      "case_w1_clarification_interaction_missing_premise_005_pytest",
+      "case_w1_clarification_interaction_missing_premise_006_spring_petclinic",
+      "case_w1_clarification_interaction_missing_premise_007_rich",
+      "case_w1_clarification_interaction_missing_premise_008_poetry",
+      "case_w1_clarification_interaction_missing_premise_009_rich",
+      "case_w1_clarification_interaction_missing_premise_010_textual",
+      "case_w1_clarification_interaction_target_selection_017_express",
+      "case_w1_clarification_interaction_target_selection_018_fastapi",
+      "case_w1_clarification_interaction_target_selection_019_sqlfluff",
+      "case_w1_clarification_interaction_target_selection_020_spring_petclinic",
+      "case_w1_core_repo_state_config_build_test_073_express",
+      "case_w1_core_repo_state_config_build_test_074_transformers",
+      "case_w1_core_repo_state_config_build_test_075_vite",
+      "case_w1_core_repo_state_config_build_test_076_spring_petclinic",
+      "case_w1_core_repo_state_config_build_test_077_pytest",
+      "case_w1_core_repo_state_config_build_test_078_flask",
+      "case_w1_core_repo_state_config_build_test_079_fastapi",
+      "case_w1_core_repo_state_config_build_test_080_poetry",
+      "case_w1_core_repo_state_environment_dependency_001_express",
+      "case_w1_core_repo_state_environment_dependency_002_transformers",
+      "case_w1_core_repo_state_environment_dependency_003_vite",
+      "case_w1_core_repo_state_environment_dependency_004_spring_petclinic",
+      "case_w1_core_repo_state_environment_dependency_005_pytest",
+      "case_w1_core_repo_state_environment_dependency_006_flask",
+      "case_w1_core_repo_state_environment_dependency_007_fastapi",
+      "case_w1_core_repo_state_environment_dependency_008_poetry",
+      "case_w1_core_repo_state_environment_dependency_009_express",
+      "case_w1_core_repo_state_environment_dependency_010_transformers",
+      "case_w1_core_repo_state_environment_dependency_011_vite",
+      "case_w1_core_repo_state_environment_dependency_012_spring_petclinic",
+      "case_w1_core_repo_state_environment_dependency_013_pytest",
+      "case_w1_core_repo_state_environment_dependency_014_flask",
+      "case_w1_core_repo_state_environment_dependency_015_fastapi",
+      "case_w1_core_repo_state_environment_dependency_016_poetry",
+      "case_w1_core_repo_state_environment_dependency_017_express",
+      "case_w1_core_repo_state_environment_dependency_018_transformers",
+      "case_w1_core_repo_state_environment_dependency_019_vite",
+      "case_w1_core_repo_state_environment_dependency_020_spring_petclinic",
+      "case_w1_core_repo_state_environment_dependency_021_pytest",
+      "case_w1_core_repo_state_environment_dependency_022_flask",
+      "case_w1_core_repo_state_environment_dependency_023_fastapi",
+      "case_w1_core_repo_state_environment_dependency_024_poetry",
+      "case_w1_core_repo_state_environment_dependency_025_express",
+      "case_w1_core_repo_state_environment_dependency_026_transformers",
+      "case_w1_core_repo_state_environment_dependency_027_vite",
+      "case_w1_core_repo_state_environment_dependency_028_spring_petclinic",
+      "case_w1_core_repo_state_environment_dependency_029_pytest",
+      "case_w1_core_repo_state_environment_dependency_030_flask",
+      "case_w1_core_repo_state_environment_dependency_031_fastapi",
+      "case_w1_core_repo_state_environment_dependency_032_poetry",
+      "case_w1_core_repo_state_environment_dependency_033_express",
+      "case_w1_core_repo_state_environment_dependency_034_transformers",
+      "case_w1_core_repo_state_environment_dependency_035_vite",
+      "case_w1_core_repo_state_filesystem_semantics_036_vite",
+      "case_w1_core_repo_state_filesystem_semantics_037_mlflow",
+      "case_w1_core_repo_state_filesystem_semantics_038_textual",
+      "case_w1_core_repo_state_filesystem_semantics_039_black",
+      "case_w1_core_repo_state_filesystem_semantics_040_sqlfluff",
+      "case_w1_core_repo_state_filesystem_semantics_041_coveragepy",
+      "case_w1_core_repo_state_filesystem_semantics_042_rich",
+      "case_w1_core_repo_state_filesystem_semantics_043_vite",
+      "case_w1_core_repo_state_filesystem_semantics_044_mlflow",
+      "case_w1_core_repo_state_filesystem_semantics_045_textual",
+      "case_w1_core_repo_state_filesystem_semantics_046_black",
+      "case_w1_core_repo_state_filesystem_semantics_047_sqlfluff",
+      "case_w1_core_repo_state_filesystem_semantics_048_coveragepy",
+      "case_w1_core_repo_state_filesystem_semantics_049_rich",
+      "case_w1_core_repo_state_filesystem_semantics_050_vite",
+      "case_w1_core_repo_state_filesystem_semantics_051_mlflow",
+      "case_w1_core_repo_state_filesystem_semantics_052_textual",
+      "case_w1_core_repo_state_filesystem_semantics_053_black",
+      "case_w1_core_repo_state_filesystem_semantics_054_sqlfluff",
+      "case_w1_core_repo_state_filesystem_semantics_055_coveragepy",
+      "case_w1_core_repo_state_filesystem_semantics_056_rich",
+      "case_w1_core_repo_state_filesystem_semantics_057_vite",
+      "case_w1_core_repo_state_filesystem_semantics_058_mlflow",
+      "case_w1_core_repo_state_filesystem_semantics_059_textual",
+      "case_w1_core_repo_state_filesystem_semantics_060_black",
+      "case_w1_core_repo_state_git_policy_061_spring_petclinic",
+      "case_w1_core_repo_state_git_policy_062_flask",
+      "case_w1_core_repo_state_git_policy_063_fastapi",
+      "case_w1_core_repo_state_git_policy_064_rich",
+      "case_w1_core_repo_state_git_policy_065_django",
+      "case_w1_core_repo_state_git_policy_066_spring_petclinic",
+      "case_w1_core_repo_state_git_policy_067_flask",
+      "case_w1_core_repo_state_git_policy_068_fastapi",
+      "case_w1_core_repo_state_git_policy_069_rich",
+      "case_w1_core_repo_state_git_policy_070_django",
+      "case_w1_core_repo_state_git_policy_071_spring_petclinic",
+      "case_w1_core_repo_state_git_policy_072_flask",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_026_sqlfluff",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_027_flask",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_028_spring_petclinic",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_029_pytest",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_030_mlflow",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_031_spring_petclinic",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_032_poetry",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_033_express",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_034_coveragepy",
+      "case_w1_memory_lineage_state_lineage_scope_mismatch_035_django",
+      "case_w1_memory_lineage_state_same_key_shadowing_016_poetry",
+      "case_w1_memory_lineage_state_same_key_shadowing_017_express",
+      "case_w1_memory_lineage_state_same_key_shadowing_018_black",
+      "case_w1_memory_lineage_state_same_key_shadowing_019_rich",
+      "case_w1_memory_lineage_state_same_key_shadowing_020_spring_petclinic",
+      "case_w1_memory_lineage_state_same_key_shadowing_021_pytest",
+      "case_w1_memory_lineage_state_same_key_shadowing_022_vite",
+      "case_w1_memory_lineage_state_same_key_shadowing_023_fastapi",
+      "case_w1_memory_lineage_state_same_key_shadowing_024_poetry",
+      "case_w1_memory_lineage_state_same_key_shadowing_025_express",
+      "case_w1_memory_lineage_state_trusted_but_stale_001_express",
+      "case_w1_memory_lineage_state_trusted_but_stale_002_mlflow",
+      "case_w1_memory_lineage_state_trusted_but_stale_003_fastapi",
+      "case_w1_memory_lineage_state_trusted_but_stale_004_spring_petclinic",
+      "case_w1_memory_lineage_state_trusted_but_stale_005_pytest",
+      "case_w1_memory_lineage_state_trusted_but_stale_006_coveragepy",
+      "case_w1_memory_lineage_state_trusted_but_stale_007_flask",
+      "case_w1_memory_lineage_state_trusted_but_stale_008_poetry",
+      "case_w1_memory_lineage_state_trusted_but_stale_009_express",
+      "case_w1_memory_lineage_state_trusted_but_stale_010_textual",
+      "case_w1_memory_lineage_state_trusted_but_stale_011_spring_petclinic",
+      "case_w1_memory_lineage_state_trusted_but_stale_012_spring_petclinic",
+      "case_w1_memory_lineage_state_trusted_but_stale_013_pytest",
+      "case_w1_memory_lineage_state_trusted_but_stale_014_rich",
+      "case_w1_memory_lineage_state_trusted_but_stale_015_django"
+    ],
+    "excluded_non_executable": [],
+    "statewise_v1_freeze": {
+      "version": "StateWise-v1",
+      "valid": false,
+      "selected_variant": "combined",
+      "base_valid": false,
+      "base_fingerprint": "sha256:bf6ffd38c5e0e8130dce6a9b5a211e2687ceedc18bb0e29325af9a46c80cdf8a",
+      "expected_fingerprint": "sha256:2c425f065f242dfbff33ffd1c47119fd69c512e5e6e8a52550ac1c4fe25e0f44",
+      "actual_fingerprint": "sha256:f33ae9bfce158602de3569235da206ed196ca955e21491e1898157b49c741cab",
+      "changed_files": [],
+      "unexpected_manifest_files": []
+    },
+    "statewise_v2_contract_corrected_freeze": null,
+    "statewise_v2_contract_corrected_typedfix_freeze": {
+      "version": "StateWise-v2-contract-corrected-typedfix-v2",
+      "valid": true,
+      "arm": "statewise_v2_contract_corrected_typedfix",
+      "expected_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+      "actual_fingerprint": "sha256:0804b97693cb2f4cab236f325347b3c227c391572aa7e3048f85657640cc899e",
+      "missing_files": [],
+      "changed_files": [],
+      "dataset_identity_valid": true,
+      "expected_snapshot": "artifacts/datasets/c138e3f9c8c9d6ec/snapshot.json",
+      "selected_snapshot": "artifacts/datasets/c138e3f9c8c9d6ec/snapshot.json",
+      "expected_cases_root": "artifacts/datasets/c138e3f9c8c9d6ec\\cases",
+      "selected_cases_root": "artifacts/datasets/c138e3f9c8c9d6ec\\cases",
+      "expected_snapshot_sha256": "c138e3f9c8c9d6ec816353df7872bb127e4fc2a14852f03673638c3dba5f4f15",
+      "actual_snapshot_sha256": "c138e3f9c8c9d6ec816353df7872bb127e4fc2a14852f03673638c3dba5f4f15",
+      "dataset_check": {
+        "valid": true,
+        "snapshot_id": "w1_contract_corrected_v2",
+        "snapshot_path": "artifacts/datasets/c138e3f9c8c9d6ec/snapshot.json",
+        "snapshot_sha256": "c138e3f9c8c9d6ec816353df7872bb127e4fc2a14852f03673638c3dba5f4f15",
+        "cases_root": "artifacts/datasets/c138e3f9c8c9d6ec\\cases",
+        "case_count": 150,
+        "errors": []
+      },
+      "required_runtime": {
+        "worker_isolation": "process",
+        "cross_model_fallback": false
+      }
+    },
+    "measurement_code_fingerprints": {
+      "scaffold/runners/run_managed_pilot.py": "4df406a8a87f0efd1c28120ebc48e7887ac22567acbb8999fa62c751019c4dcd",
+      "scaffold/statewise/experiments/pilot_conditions.py": "d77eac627a3bd61363e39741303baed7c2b055c2b2d335185a21d8d20e00088d\n",
+      "scaffold/statewise/experiments/attribution_v2.py": "0c70500e847c6b9ed0ab90cb0951e44e361393069cdd9a5a8ef18ceff61896be",
+      "scaffold/statewise/experiments/attribution_v2_simple.py": "07874331fc4f8033f77cec463b218e707ccefd1caf572fb351f1a854c5567a2e",
+      "scaffold/statewise/experiments/attribution_v2_typed.py": "35556420a642bef3ccb31974b1485ba15d7695cd19c0f8706e2d878554bfe51f",
+      "scaffold/statewise/experiments/downstream_progress.py": "8778592f7bfcfcafb032fd6ffe128d662dac43cfb6bc83a8e388178f8913e093",
+      "scaffold/statewise/experiments/downstream_recovery.py": "6a74e9da477fbecb41386e43855708809dd60a132f801393d093ecdbb566cd14",
+      "scaffold/statewise/experiments/downstream_constraint_replan.py": "8621ab4269c5a32aef39641f475f32d17ff7c4e55f99a49c4d8cd7ec33b41e0f",
+      "scaffold/statewise/agents/llm_client.py": "e3271d1522727a4d3312be421f1024c2497748465fa64fb1aa080449886814d5\n",
+      "scaffold/statewise/core/action_model.py": "b62af9febbfb948890bb7e3092ac838b94bf5adc3ee798576b7b5df5d2df4d06\n",
+      "scaffold/statewise/evaluation/grading.py": "5c5202f779936bedc5083847206815e35ed4f44ebb23db73c5c0d9cebde12531",
+      "scaffold/statewise/experiments/baseline_interactions.py": "b6a47f86d99b1c7a30b15764938553d526c2d794eba7582ae14891fea2a774fc\n",
+      "scaffold/statewise/experiments/safety_sentry_baseline.py": "c3131e2ae925ab1a3a0515b457b3d5f583328c495998eac161786cbdc651d8aa\n",
+      "scaffold/statewise/experiments/memlineage_baseline.py": "ef60a14db22b31b75ebc9c0d6df3e0c884a3003992d221eca65eec55e3d0ba46\n",
+      "scaffold/statewise/experiments/live_refresh_baseline.py": "11bfbb3d30579a4489b1a6e7a37f80948482b63a9eda2cb5965b302943657358",
+      "scaffold/statewise/experiments/experiment_manager.py": "3115624786f3825e6bde85fddf5ab3b51c08204b582a4229586fee35671c1bdb",
+      "scaffold/statewise/runtime/lightweight_runtime.py": "844f36ee193f05cb1c12b46a34de55855a58f6b053b9a1171d601d1c314ae4ec",
+      "scaffold/runners/run_managed_episode_worker.py": "654acb9da9e9c2e98cc22c1a795aca0f5d84cb970b0e6b579310c10ff2b2daeb"
+    },
+    "shared_proposal_arms": [
+      "corrupted",
+      "live_refresh",
+      "statewise_v2_contract_corrected_typedfix"
+    ],
+    "shared_proposal_cost_policy": "separate_setup_bucket",
+    "runtime_concurrency": 6,
+    "worker_isolation": "process",
+    "global_method_state_arms": [
+      "statewise_v2_contract_corrected_typedfix"
+    ]
+  },
+  "dataset": {
+    "valid": true,
+    "snapshot_id": "w1_contract_corrected_v2",
+    "snapshot_path": "artifacts/datasets/c138e3f9c8c9d6ec/snapshot.json",
+    "snapshot_sha256": "c138e3f9c8c9d6ec816353df7872bb127e4fc2a14852f03673638c3dba5f4f15",
+    "cases_root": "artifacts/datasets/c138e3f9c8c9d6ec\\cases",
+    "case_count": 150,
+    "errors": []
+  },
+  "manager": {
+    "max_concurrency": 6,
+    "requires_process_isolation": false,
+    "retry_policy": {
+      "max_attempts": 5,
+      "initial_backoff_seconds": 2,
+      "backoff_multiplier": 2.0,
+      "max_backoff_seconds": 30,
+      "retryable_failures": [
+        "api.connection",
+        "api.rate_limit",
+        "api.server",
+        "api.timeout",
+        "process.interrupted",
+        "workspace.setup"
+      ]
+    },
+    "provider_profiles": [
+      "api_02"
+    ],
+    "workspace_layout": "workspaces/<episode_id>/attempt-NNN/"
+  },
+  "aggregate": {
+    "episodes": 900,
+    "attempts": 900,
+    "status_counts": {
+      "SUCCEEDED": 900
+    },
+    "failure_counts": {},
+    "by_condition": {
+      "correct": {
+        "SUCCEEDED": 150
+      },
+      "corrupted": {
+        "SUCCEEDED": 150
+      },
+      "live_refresh_correct": {
+        "SUCCEEDED": 150
+      },
+      "live_refresh": {
+        "SUCCEEDED": 150
+      },
+      "statewise_correct": {
+        "SUCCEEDED": 150
+      },
+      "statewise_v2_contract_corrected_typedfix": {
+        "SUCCEEDED": 150
+      }
+    },
+    "usage": {
+      "calls": 6883,
+      "failed_calls": 0,
+      "prompt_tokens": 6581913,
+      "completion_tokens": 1812392,
+      "total_tokens": 8394288,
+      "latency_seconds": 40700.5137,
+      "cost_usd": 0.0
+    }
+  },
+  "finished_at": "2026-09-02T21:02:17.587615+00:00",
+  "anonymous_repackaging": {
+    "original_manifest_sha256": "509a340ee03089107a6e207cca17e4c0c60e79f1e4fdf8d4f1741ac38bd2d9cc",
+    "historical_fingerprints_preserved": true,
+    "episode_storage": "Split from original manifest or existing checkpoints; no experiment rerun.",
+    "episodes_index": "episode_index.json",
+    "episode_count": 900
+  }
+}

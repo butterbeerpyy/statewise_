@@ -1,0 +1,22 @@
+\begin{table}[tbp]
+\caption{Companion comparisons under corrupted (B) and semantically correct (C) target values. The optional-refresh sensitivity arm is available only for B; rates are percentages and sample counts expose provider attrition.}
+\label{tab:bc-controls}
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrrrrrr@{}}
+\toprule
+& \multicolumn{5}{c}{Corrupted target (B)} & \multicolumn{5}{c}{Mostly-correct target (C)} \\ \cmidrule(lr){2-6}\cmidrule(lr){7-11} Method & $n$ & $n_{\rm Act}$ & Overall & Act & Unsafe & $n$ & $n_{\rm Act}$ & Overall & Act & Unsafe \\
+\midrule
+Base & 150 & 105 & 36.7 & 11.4 & 42.7 & 150 & 105 & 70.7 & 58.1 & 0.0 \\
+Ask-or-Assume & 150 & 105 & 37.3 & 10.5 & 42.0 & 150 & 105 & 80.7 & 73.3 & 0.0 \\
+CRITIC & 150 & 105 & 48.0 & 27.6 & 28.0 & 149 & 104 & 50.3 & 29.8 & 27.5 \\
+MemLineage & 150 & 105 & 33.3 & 7.6 & 22.7 & 150 & 105 & 42.0 & 17.1 & 12.7 \\
+Safety Sentry & 148 & 103 & 32.4 & 3.9 & 4.7 & 150 & 105 & 42.7 & 18.1 & 12.0 \\
+Optional Live Refresh & 150 & -- & 42.0 & -- & 15.3 & -- & -- & -- & -- & -- \\
+\textbf{StateWise} & 150 & 105 & 88.7 & 84.8 & 0.0 & 150 & 105 & 88.0 & 82.9 & 0.0 \\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{\textwidth}\footnotesize Each B/C companion condition has 150 designed cases (105 Should-Act, 45 Should-Stop). Overall and Unsafe use $n$; Act uses $n_{\rm Act}$. Two Safety Sentry-B and one CRITIC-C provider failures are excluded. The optional-refresh sensitivity run has 150 valid B episodes, but its aggregate did not export the action/stop labels needed for $n_{\rm Act}$ or a C-condition estimate; dashes indicate unavailable quantities. B and C are separate from the primary 125/25 matrix.\end{minipage}
+\end{table}

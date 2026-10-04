@@ -1,0 +1,75 @@
+{
+  "schema_version": "statewise-attribution-v2-config-v1",
+  "method_name": "StateWise-v2+DecisionAwareRetrieval",
+  "status": "diagnostic_not_expansion_qualified",
+  "created_at": "2026-07-31T03:36:00+08:00",
+  "statewise_v1_fingerprint": "sha256:2c425f065f242dfbff33ffd1c47119fd69c512e5e6e8a52550ac1c4fe25e0f44",
+  "statewise_v2_fingerprint": "sha256:9bc2ea669f2aa296ad80775dc0e78d1e324252daf852b745b2fc3f221e6a08fb",
+  "freeze_boundary": {
+    "v1_modified": false,
+    "v1_weights_modified": false,
+    "router_modified": false,
+    "evaluator_modified_for_v2": false,
+    "frozen_224_snapshot_modified": false
+  },
+  "retrieval": {
+    "mode": "conditional_rescue",
+    "candidate_pool": "v1_candidates union retrieval_rescue_candidates",
+    "triggers": [
+      "v1 candidates empty",
+      "v1 target not covered",
+      "v1 candidate scope mismatch",
+      "required action/state facet absent"
+    ],
+    "hard_filters": [
+      "active repository/workspace scope",
+      "incompatible documentation/example namespace",
+      "incompatible operation/state type",
+      "clearly unrelated target",
+      "conflicting target sibling"
+    ],
+    "ranking_order": [
+      "exact value/target relation",
+      "exact repository/workspace scope",
+      "direct provenance",
+      "operation/state compatibility",
+      "semantic/BM25 rank"
+    ],
+    "semantic_similarity_usage": "candidate recall and ranking only; never P_ground",
+    "retrieval_top_k": 8,
+    "counterfactual_candidate_budget": 4,
+    "counterfactual_interventions_per_candidate": 3,
+    "counterfactual_interventions": [
+      "remove",
+      "mark_uncertain",
+      "first plausible replacement"
+    ],
+    "minimum_retrieval_score": 0.16,
+    "minimum_counterfactual_delta": 0.5,
+    "minimum_counterfactual_stability": 0.5,
+    "graph_enabled": false
+  },
+  "offline_audit": {
+    "snapshot_id": "statewise_current_pool_v1",
+    "snapshot_case_count": 224,
+    "evaluable_cases": 223,
+    "candidate_support_recall": 0.9407114624505929,
+    "empty_candidate_rate": 0.008968609865470852,
+    "mean_candidates": 1.3183856502242153,
+    "max_candidates": 4,
+    "labeled_decoy_count": 17,
+    "graph_incremental_gain": 0.0,
+    "artifact": "runs/attribution_v2_audit/attr-v2-candidate-audit-iter2-20260731.json"
+  },
+  "gate_status": {
+    "gate4_passed": true,
+    "gate16_completed": true,
+    "gate16_passed": false,
+    "expansion_allowed": false,
+    "gate16_complete_summary": "runs/attribution_v2_compare/attribution-v2-gate16-complete-summary.json",
+    "blocking_checks": [
+      "final_micro_precision_0.8667_below_0.90",
+      "task_success_7_of_16_below_v1_8_of_16"
+    ]
+  }
+}

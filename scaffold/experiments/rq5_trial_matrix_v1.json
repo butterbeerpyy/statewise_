@@ -1,0 +1,128 @@
+{
+  "schema_version": "rq5-trial-matrix-v1",
+  "matrix_id": "rq5-trials-optionA-crossmodel-v1",
+  "status": "PRE_REGISTERED",
+  "declared_at": "2026-08-07",
+  "declared_before_running": true,
+  "rationale": "This file fixes the arms, trial counts and models BEFORE the runs launch, so the trial count cannot be read as having been chosen after seeing which contrast reached significance. It is written once and not edited after the first episode completes.",
+  "dataset": {
+    "dataset_id": "rq5-longitudinal-40-v2",
+    "composite_sha256": "a871a91427dd4a5bead0115be695bb74df28a660b25990103cdece681b4b7a62",
+    "analysis_scope": "rq5_analysis_scope_v1.json",
+    "primary_domains": [
+      "environment",
+      "git",
+      "database",
+      "deployment"
+    ],
+    "sequences_per_domain": 4,
+    "primary_sequence_count": 16,
+    "excluded_domain": "filesystem",
+    "excluded_reason": "pre-registered method limitation (typed-grounding rejects path-valued semantic states)"
+  },
+  "primary_endpoint": {
+    "name": "all_future_success",
+    "definition": "every post-repair task (T2-T4) in the sequence succeeded",
+    "unit": "sequence",
+    "why": "RQ5 claims a single state repair yields lasting benefit, so the endpoint must be about tasks AFTER the repair, not aggregate task success."
+  },
+  "secondary_endpoints": [
+    "no_safety_violation",
+    "no_repeated_intervention",
+    "state_reused",
+    "t1_repair_satisfied",
+    "all_tasks_success"
+  ],
+  "trial_plan": {
+    "option": "A (minimal)",
+    "justification": "RQ5's discriminating contrasts are against the arm that never repairs (corrupted) and the arm that intervenes only at the action layer (rationale_approval). Those two plus the method arm receive 3 trials so the primary endpoint carries a variance estimate. The remaining arms are corroborating evidence and stay at 1 trial; their contrasts are reported as single-trial and labelled as such.",
+    "arms_at_3_trials": [
+      "statewise_v2_retrieval",
+      "corrupted",
+      "rationale_approval"
+    ],
+    "arms_at_1_trial": [
+      "correct",
+      "no_memory",
+      "auto_execute",
+      "bare_approval",
+      "generic_clarification",
+      "safety_sentry",
+      "memlineage_trust",
+      "oracle_statewise"
+    ],
+    "trials_already_complete": 1,
+    "additional_trials_to_run": 2,
+    "trial_indices_to_add": [
+      1,
+      2
+    ]
+  },
+  "cross_model_plan": {
+    "purpose": "Establish that the method advantage is not specific to one model family. Without baselines on the other models, the cross-model evidence shows only that the method works there, not that it beats the alternatives there.",
+    "models": [
+      {
+        "model": "deepseek-v4-pro",
+        "api_profile": "rq5v2_deepseek_v4pro"
+      },
+      {
+        "model": "qwen3.7-max",
+        "api_profile": "rq5v2_qwen37max"
+      }
+    ],
+    "arms": [
+      "corrupted",
+      "rationale_approval"
+    ],
+    "trials": 1,
+    "method_arm_already_complete": true,
+    "note": "The method arm already has 16 primary sequences on both models at 1 trial. Only the two baselines are missing."
+  },
+  "planned_volume": {
+    "trial_expansion": {
+      "arms": 3,
+      "sequences": 16,
+      "additional_trials": 2,
+      "tasks_per_sequence": 4,
+      "episodes": 96,
+      "api_calls_estimate": 384
+    },
+    "cross_model_baselines": {
+      "models": 2,
+      "arms": 2,
+      "sequences": 16,
+      "trials": 1,
+      "tasks_per_sequence": 4,
+      "episodes": 64,
+      "api_calls_estimate": 256
+    },
+    "total_episodes": 160,
+    "total_api_calls_estimate": 640
+  },
+  "execution_constraints": {
+    "max_concurrency": 1,
+    "reason": "every statewise_* and oracle_* arm installs process-global method hooks; concurrency>1 in one process cross-contaminates episodes (213/222 polluted in the historical full222 run)",
+    "worker_isolation": "process where the runner supports it",
+    "fallback_api_profile_allowed": true,
+    "fallback_note": "transport failover only; the manifest records the profile actually used per episode and mixed-provider episodes must be reported, not silently pooled"
+  },
+  "statistical_plan": {
+    "test": "two-sided exact McNemar on sequence-level binary outcomes",
+    "ci": "case-paired bootstrap, 10000 rounds, seed 20260806",
+    "multiplicity": "Holm correction across baseline arms, computed per endpoint",
+    "aggregation": "report micro and domain-equal-weight macro side by side",
+    "trial_handling": "for arms with 3 trials, the sequence outcome is reported per trial and the paired test uses trial-matched pairs; a sequence is counted as succeeding only if it succeeds in that specific trial. Do not average trials into a single binary before testing.",
+    "attrition_handling": "episodes absent due to model.response_contract are reported as provider attrition with their sequence ids and excluded from the paired N for that arm; they are never imputed"
+  },
+  "stopping_rule": {
+    "rule": "run exactly the volume declared above, then stop and analyze",
+    "no_adaptive_stopping": true,
+    "note": "No arm receives extra trials because its contrast was not yet significant, and no arm is dropped because its contrast was unfavourable."
+  },
+  "provenance": {
+    "declared_by": "Claude (Opus 5) interactive session, at the user's instruction to use option A plus cross-model baselines",
+    "batch": "batch-claude-20260806-5domain-canary",
+    "prior_evidence": "single-trial 11-arm paired analysis already computed; this matrix adds variance estimates and cross-model contrast",
+    "concurrent_agent_note": "Codex produced the original single-trial runs. Any merge must first match method_fingerprint, dataset_composite_sha256, model, provider profile, analysis scope and isolation mode."
+  }
+}
